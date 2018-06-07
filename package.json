@@ -1,0 +1,14 @@
+{
+  "name": "msa-main",
+  "version": "0.1.0",
+  "description": "Default main module for MySimpleApp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nicolas CARREZ",
+  "license": "MIT",
+  "dependencies": {
+    "mustache": "^2.3.0"
+  }
+}

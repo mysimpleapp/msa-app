@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<script>
+		// load observe and webcomponents polyfills (only if needed)
+		var loadScript = function(src) {
+			var script = document.createElement('script');
+			script.src = src;
+			document.head.appendChild(script);
+		}
+		var supportsCustomElements = ('registerElement' in document)
+		var supportsImports = ('import' in document.createElement('link'))
+		var supportsTemplate = ('content' in document.createElement('template'))
+		if(!(supportsCustomElements && supportsImports && supportsTemplate))
+			loadScript('/msa/webcomponents-lite.min.js');
+	</script>
+	<title>My Simple App</title>
+	<style>
+		html, body {
+			padding: 0;
+			margin: 0;
+		}
+		html {
+			height: 100%;
+		}
+		body {
+			min-height: 100%;
+			display: flex;
+			flex-direction: column;
+		}
+		#content > * {
+			flex: 1;
+		}
+	</style>
+	<!-- <link rel="import" href="/msa/msa.html"></link> -->
+	{{{userPartial.head}}}
+	{{{headerPartial.head}}}
+	{{{contentPartial.head}}}
+</head>
+<body>
+	<div id='header' style="display:flex;">{{{headerPartial.body}}}</div>
+	<div id='content' style="display:flex; flex:1;">{{{contentPartial.body}}}</div>
+</body>
+</html>
