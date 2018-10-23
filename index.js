@@ -18,7 +18,8 @@ var template = fs.readFileSync(join(__dirname, 'views/index.html'), "utf8")
 mustache.parse(template)
 
 // default route
-msaMain.setDefaultRoute = function(next) {
+msaMain.defaultRoute = Msa.params.default_route
+/*msaMain.setDefaultRoute = function(next) {
 	msaUser.isFirstRegisterDone(function(err, done) {
 		if(err) return next(err)
 		if(done) msaMain.defaultRoute = Msa.params.default_route
@@ -33,7 +34,7 @@ msaMain.setDefaultRoute = function(next) {
 }
 msaMain.setDefaultRoute(function(err) {
 	if(err) console.log(err)
-})
+})*/
 
 // log
 if(Msa.params.log_level==="DEBUG") {
