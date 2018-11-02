@@ -1,13 +1,13 @@
-var msaMain = module.exports = Msa.module("")
+//const msaMain = module.exports = Msa.module("")
 
-//var msaNavmenu = require("../../msa-navmenu/msa-server")
+//const msaNavmenu = require("../../msa-navmenu/msa-server")
 const msaUser = Msa.require("user")
-
-const formatHtml = Msa.formatHtml
+const msaParams = Msa.require("params")
 
 // params
-
-Msa.params.default_route = "/page/home"
+msaParams.registerParam("app.default_route", {
+	defVal: "/page/home"
+})
 
 // template
 const path = require('path'),
@@ -15,38 +15,95 @@ const path = require('path'),
 const fs = require('fs')
 const { promisify:prm } = require('util')
 const mustache = require('mustache')
-const template = fs.readFileSync(join(__dirname, 'views/index.html'), "utf8")
+const template = fs.readFileSync(join(__dirname, 'templates/index.html'), "utf8")
 mustache.parse(template)
 
-// log
-if(Msa.params.log_level==="DEBUG") {
-	msaMain.app.use(function(req, res, next) {
-		console.log(req.method+' '+req.url)
-		next()
-	})
+const MsaMain = class extends Msa.Module {
+	constructor() {
+		super("")
+		this.initApp()
+	}
+
+	initApp() {
+		if(this.initDebugMdw) this.initDebugMdw()
+		if(this.initFirstMdws) this.initFirstMdws()
+		if(this.initDefaultRouteMdw) this.initDefaultRouteMdw()
+		if(this.initMsaModsMdw) this.initMsaModsMdw()
+		if(this.initEndMdws) this.initEndMdws()
+		if(this.initStaticMdw) this.initStaticMdw()
+		if(this.initErrMdw) this.initErrMdw()
+	}
+
+	// debug log
+	initDebugMdw(){
+		if(Msa.params.log_level==="DEBUG") {
+			this.app.use((req, res, next) => {
+				console.log(req.method+' '+req.url)
+				next()
+			})
+		}
+	}
+
+	// first middlewares
+	initFirstMdws() {
+		this.app
+			.use(Msa.bodyParser.text())
+			.use(Msa.bodyParser.json())
+			.use(Msa.bodyParser.urlencoded({ extended:false }))
+			.use((req, res, next) => {
+				res.sendPage = this.sendPage
+				res._req = req
+				next()
+			})
+	}
+
+	// default route
+	initDefaultRouteMdw() {
+		const defRoute = Msa.params.app.default_route
+		if(defRoute) {
+			this.app.get("/", (req, res, next) => {
+				res.redirect(defRoute)
+			})
+		}
+	}
+
+	// msa modules
+	initMsaModsMdw() {
+		this.app.use(Msa.modulesRouter)
+	}
+
+	// static
+	initStaticMdw() {
+		this.app.use(Msa.express.static(join(__dirname, "static")))
+	}
+
+	// error handling
+	initErrMdw(){
+		this.app.use((err, req, res, next) => {
+			// determine error code & text
+			if(typeof err=='object') {
+				if(err instanceof Error) var text=err
+				else var code=err.code, text=err.text
+			} else if(typeof err=='number') var code=err
+			else var text=err
+			if(!code) code=500
+			if(!text) text=''
+			// respond to client
+			res.sendStatus(code)
+			// log error
+			if(Msa.params.log_level==="DEBUG") {
+				console.error('ERROR', code, text)
+			}
+		})
+	}
 }
+const MsaMainPt = MsaMain.prototype
 
-// default route
-msaMain.app.get("/", function(req, res, next) {
-	res.redirect(Msa.params.default_route)
-})
-
-// import some middlewares
-msaMain.app.use(Msa.bodyParser.text())
-msaMain.app.use(Msa.bodyParser.json())
-msaMain.app.use(Msa.bodyParser.urlencoded({ extended:false }))
-
-const msaModsMdw = Msa.modulesRouter
-msaMain.msaModsMdw = function(req, res, next) {
-	res.sendPage = sendPage
-	res._req = req
-	msaModsMdw(req, res, next)
-}
-msaMain.app.use(msaMain.msaModsMdw)
-
-// will be a method of "res"
+// sendPage
+// (will be a method of "res")
+const formatHtml = Msa.formatHtml
 const getUserHtml= msaUser.getHtml
-const sendPage = function(htmlExpr) {
+MsaMainPt.sendPage = function(htmlExpr) {
 	try {
 		const contentPartial = formatHtml(htmlExpr)
 		// get user partial
@@ -64,22 +121,4 @@ const _sendPage2 = function(partials, res) {
 	} catch(err) { res.sendStatus(500); console.warn(err) }
 }
 
-// error handling
-msaMain.handleErrMdw = function(err, req, res, next){
-	// determine error code & text
-	if(typeof err=='object') {
-		if(err instanceof Error) var text=err
-		else var code=err.code, text=err.text
-
-	} else if(typeof err=='number') var code=err
-	else var text=err
-	if(!code) code=500
-	if(!text) text=''
-	// respond to client
-	res.sendStatus(code)
-	// log error
-	if(Msa.params.log_level==="DEBUG") {
-		console.error('ERROR', code, text)
-	}
-}
-msaMain.app.use(msaMain.handleErrMdw)
+module.exports = new MsaMain()
