@@ -1,5 +1,3 @@
-//const msaMain = module.exports = Msa.module("")
-
 //const msaNavmenu = require("../../msa-navmenu/msa-server")
 const msaUser = Msa.require("user")
 const msaParams = Msa.require("params")
@@ -18,7 +16,7 @@ const mustache = require('mustache')
 const template = fs.readFileSync(join(__dirname, 'templates/index.html'), "utf8")
 mustache.parse(template)
 
-const MsaMain = class extends Msa.Module {
+const MsaApp = class extends Msa.Module {
 	constructor() {
 		super("")
 		this.initApp()
@@ -97,13 +95,13 @@ const MsaMain = class extends Msa.Module {
 		})
 	}
 }
-const MsaMainPt = MsaMain.prototype
+const MsaAppPt = MsaApp.prototype
 
 // sendPage
 // (will be a method of "res")
 const formatHtml = Msa.formatHtml
 const getUserHtml= msaUser.getHtml
-MsaMainPt.sendPage = function(htmlExpr) {
+MsaAppPt.sendPage = function(htmlExpr) {
 	try {
 		const contentPartial = formatHtml(htmlExpr)
 		// get user partial
@@ -121,4 +119,4 @@ const _sendPage2 = function(partials, res) {
 	} catch(err) { res.sendStatus(500); console.warn(err) }
 }
 
-module.exports = new MsaMain()
+module.exports = new MsaApp()
