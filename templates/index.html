@@ -2,6 +2,9 @@
 <html>
 <head>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--	<script src="/msa/webcomponentsjs/webcomponents-hi-sd-ce.js"></script> -->
+<!--
 	<script>
 		// load observe and webcomponents polyfills (only if needed)
 		var loadScript = function(src) {
@@ -15,6 +18,7 @@
 		if(!(supportsCustomElements && supportsImports && supportsTemplate))
 			loadScript('/msa/webcomponents-lite.min.js');
 	</script>
+-->
 	<title>My Simple App</title>
 	<style>
 		html, body {
@@ -34,6 +38,7 @@
 		}
 	</style>
 	<link rel="stylesheet" type="text/css" href="/style.css"></link>
+	<script src="/msa/msa.js" type="module"></script>
 	{{{userPartial.head}}}
 	{{{headerPartial.head}}}
 	{{{contentPartial.head}}}
