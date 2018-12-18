@@ -16,4 +16,8 @@ table th {
 table tr:nth-child(even) {
 	background: #ddd;
 }
+table .clickable:hover {
+	background: orange;
+	cursor: pointer;
+}
 

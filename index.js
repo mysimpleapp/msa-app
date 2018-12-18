@@ -1,9 +1,9 @@
 //const msaNavmenu = require("../../msa-navmenu/msa-server")
 const msaUser = Msa.require("user")
-const msaParams = Msa.require("params")
+const { ParamDef } = Msa.require("params")
 
 // params
-msaParams.registerParam("app.default_route", {
+new ParamDef("app.default_route", {
 	defVal: "/page/home"
 })
 
