@@ -18,7 +18,7 @@ mustache.parse(template)
 
 const MsaApp = class extends Msa.Module {
 	constructor() {
-		super("")
+		super()
 		this.initApp()
 	}
 
