@@ -1,6 +1,6 @@
 {
   "name": "@mysimpleapp/msa-app",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MySimplepp default app module",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,7 @@
   },
   "msaKey": "$app",
   "msaDependencies": {
-    "user": "../msa-user",
-    "params": "../msa-params"
+    "user": "@mysimpleapp/msa-user",
+    "params": "@mysimpleapp/msa-params"
   }
 }
