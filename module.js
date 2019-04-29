@@ -1,3 +1,5 @@
+const { globalParams } = Msa.require('params')
+
 const MsaApp = class extends Msa.Module {
 
 	constructor() {
@@ -59,7 +61,7 @@ const MsaApp = class extends Msa.Module {
 
 	// default route
 	initDefaultRouteMdw() {
-		const defRoute = Msa.params.app.default_route
+		const defRoute = globalParams.app.default_route
 		if(defRoute) {
 			this.app.get("/", (req, res, next) => {
 				res.redirect(defRoute)

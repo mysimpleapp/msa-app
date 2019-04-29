@@ -1,6 +1,6 @@
 {
   "name": "@mysimpleapp/msa-app",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "MySimplepp default app module",
   "main": "index.js",
   "scripts": {
