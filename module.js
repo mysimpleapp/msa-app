@@ -82,20 +82,20 @@ const MsaApp = class extends Msa.Module {
 	// error handling
 	initErrMdw(){
 		this.app.use((err, req, res, next) => {
+			var text, code
 			// determine error code & text
 			if(typeof err=='object') {
-				if(err instanceof Error) var text=err
-				else var code=err.code, text=err.text
-			} else if(typeof err=='number') var code=err
-			else var text=err
+				if(err instanceof Error) text=err
+				else code=err.code, text=err.text
+			} else if(typeof err=='number') code=err
+			else text=err
 			if(!code) code=500
-			if(!text) text=''
 			// respond to client
-			res.sendStatus(code)
+			if(!text || code>=500) res.sendStatus(code)
+			else res.status(code).send(text)
 			// log error
-			if(Msa.params.log_level==="DEBUG") {
-				console.error('ERROR', code, text)
-			}
+			if(Msa.params.log_level==="DEBUG")
+				console.error('ERROR', code, text || '')
 		})
 	}
 }
