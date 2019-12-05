@@ -13,6 +13,7 @@
   },
   "msaKey": "$app",
   "msaDependencies": {
+    "utils": "@mysimpleapp/msa-utils",
     "user": "@mysimpleapp/msa-user",
     "params": "@mysimpleapp/msa-params"
   }

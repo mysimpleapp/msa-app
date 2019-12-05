@@ -1,3 +1,4 @@
+const { formatHtml } = Msa.require('utils')
 const { globalParams } = Msa.require('params')
 
 const MsaApp = class extends Msa.Module {
@@ -103,7 +104,6 @@ const MsaAppPt = MsaApp.prototype
 
 // sendPage
 // (will be a method of "res")
-const formatHtml = Msa.formatHtml
 const msaUser = Msa.require("user")
 const getUserHtml= msaUser.getHtml
 MsaAppPt.sendPage = function(htmlExpr) {
