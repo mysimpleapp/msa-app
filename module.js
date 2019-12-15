@@ -27,8 +27,8 @@ const MsaApp = class extends Msa.Module {
 	}
 
 	initApp() {
-		if(this.initDebugMdw) this.initDebugMdw()
 		if(this.initFirstMdws) this.initFirstMdws()
+		if(this.initDebugMdw) this.initDebugMdw()
 		if(this.initDefaultRouteMdw) this.initDefaultRouteMdw()
 		if(this.initMsaModsMdw) this.initMsaModsMdw()
 		if(this.initEndMdws) this.initEndMdws()
@@ -36,28 +36,29 @@ const MsaApp = class extends Msa.Module {
 		if(this.initErrMdw) this.initErrMdw()
 	}
 
-	// debug log
-	initDebugMdw(){
-		if(Msa.params.log_level==="DEBUG") {
-			this.app.use((req, res, next) => {
-				console.log(`[${process.pid}] ${req.method} ${req.url}`)
-				next()
-			})
-		}
-	}
-
 	// first middlewares
 	initFirstMdws() {
 		this.app
-			.use(Msa.bodyParser.text())
-			.use(Msa.bodyParser.json())
-			.use(Msa.bodyParser.urlencoded({ extended:false }))
+			.use(Msa.express.json())
+			.use(Msa.express.urlencoded({ extended:false }))
 			.use((req, res, next) => {
 				res.sendPage = this.sendPage
 				res._req = req
 				res._msaApp = this
 				next()
 			})
+	}
+
+	// debug log
+	initDebugMdw(){
+		if(Msa.params.log_level==="DEBUG") {
+			this.app.use((req, res, next) => {
+				let msg = [`[${process.pid}]`, req.method, req.url]
+				if(req.body && !isEmptyObj(req.body)) msg.push(req.body)
+				console.log(...msg)
+				next()
+			})
+		}
 	}
 
 	// default route
@@ -131,5 +132,9 @@ const fs = require('fs')
 const { promisify:prm } = require('util')
 const mustache = require('mustache')
 const readFile = prm(fs.readFile)
+
+function isEmptyObj(o){
+	return (typeof o === "object") && (Object.keys(o).length === 0)
+}
 
 module.exports = MsaApp
