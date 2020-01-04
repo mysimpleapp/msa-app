@@ -1,10 +1,12 @@
-const { ParamStrDef, ParamsDef, addGlobalParam } = Msa.require("params")
+const { ParamStr, ParamDict, addGlobalParam } = Msa.require("params")
 
-const appParamsDef = new ParamsDef()
-appParamsDef.add("default_route", new ParamStrDef({
-	defVal: "/page/home"
-}))
+class AppParamDict extends ParamDict {
+	constructor(){
+		super()
+		this.default_route = new ParamStr("/page/home")
+	}
+}
 
-addGlobalParam("app", appParamsDef)
+addGlobalParam("app", AppParamDict)
 
-module.exports = { appParamsDef }
+module.exports = { AppParamDict }
