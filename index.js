@@ -1,3 +1,6 @@
 require("./params")
 const MsaApp = require("./module")
-module.exports = new MsaApp()
+module.exports = {
+    startMsaModule: () => new MsaApp(),
+    MsaApp
+}
