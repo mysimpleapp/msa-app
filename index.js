@@ -1,6 +1,9 @@
-require("./params")
+const { addAppGlobalParams } = require("./params")
 const MsaApp = require("./module")
 module.exports = {
-    startMsaModule: () => new MsaApp(),
+    startMsaModule: () => {
+        addAppGlobalParams()
+        return new MsaApp()
+    },
     MsaApp
 }

@@ -1,12 +1,14 @@
 const { ParamStr, ParamDict, addGlobalParam } = Msa.require("params")
 
 class AppParamDict extends ParamDict {
-	constructor(){
+	constructor() {
 		super()
 		this.default_route = new ParamStr("/page/home")
 	}
 }
 
-addGlobalParam("app", AppParamDict)
+function addAppGlobalParams() {
+	addGlobalParam("app", AppParamDict)
+}
 
-module.exports = { AppParamDict }
+module.exports = { AppParamDict, addAppGlobalParams }
