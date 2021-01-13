@@ -15,6 +15,7 @@
   "msaDependencies": {
     "utils": "@mysimpleapp/msa-utils",
     "user": "@mysimpleapp/msa-user",
-    "params": "@mysimpleapp/msa-params"
+    "params": "@mysimpleapp/msa-params",
+    "header": "@mysimpleapp/msa-header"
   }
 }

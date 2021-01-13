@@ -105,8 +105,26 @@ const MsaAppPt = MsaApp.prototype
 
 // sendPage
 // (will be a method of "res")
-const msaUser = Msa.require("user")
-const getUserHtml = msaUser.getHtml
+const { getHtml: getUserHtml } = Msa.require("user")
+const { getHtml: getHeaderHtml } = Msa.require("header")
+MsaAppPt.sendPage = async function (htmlExpr) {
+	const res = this
+	try {
+		const contentPartial = formatHtml(htmlExpr)
+		const userPartial = formatHtml(await getUserHtml(this._req))
+		const headerPartial = formatHtml(await getHeaderHtml(this._req))
+		// send content
+		res.setHeader('content-type', 'text/html')
+		const html = res._msaApp.renderTemplate({
+			contentPartial,
+			userPartial,
+			headerPartial
+		})
+		res.send(html)
+	} catch (err) { this.sendStatus(500); console.warn(err) }
+}
+
+/*
 MsaAppPt.sendPage = function (htmlExpr) {
 	try {
 		const contentPartial = formatHtml(htmlExpr)
@@ -124,6 +142,7 @@ const _sendPage2 = function (partials, res) {
 		res.send(html)
 	} catch (err) { res.sendStatus(500); console.warn(err) }
 }
+*/
 
 // utils
 const path = require('path'),
