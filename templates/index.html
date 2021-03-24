@@ -30,6 +30,11 @@
 			display: flex;
 			flex-direction: column;
 		}
+		#msa-app-editor {
+			background: lightgrey;
+			height: 30px;
+			display: flex;
+		}
 		#content, #content > * {
 			flex: 1;
 			min-height: 0;
@@ -42,7 +47,8 @@
 	{{{contentPartial.head}}}
 </head>
 <body>
-	<div id='header' style="display:flex;">{{{headerPartial.body}}}</div>
+	<div id='msa-app-editor' style="display:none"></div>
+	<div id='header' style="display:flex">{{{headerPartial.body}}}</div>
 	<div id='content'>{{{contentPartial.body}}}</div>
 </body>
 </html>
