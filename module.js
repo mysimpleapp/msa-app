@@ -73,7 +73,7 @@ const MsaApp = class extends Msa.Module {
 
 	// msa modules
 	initMsaModsMdw() {
-		this.app.use(Msa.modulesRouter)
+		this.app.use("/msa", Msa.modulesRouter)
 	}
 
 	// static
